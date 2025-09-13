@@ -1,13 +1,6 @@
 # Woodendot Website - Production Deployment
 
-# Images
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.webp
-*.svg
-*.ico
+
 
 # Logs
 *.log
