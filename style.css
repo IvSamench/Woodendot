@@ -974,8 +974,9 @@ body {
 
 /* Footer Styles */
 .footer {
-  width: 1440px;
-  height: 448px;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
   margin: 0 auto;
   background: #fff;
   border-top: 1px solid #eee;
@@ -1046,8 +1047,9 @@ body {
 }
 
 .footer__newsletter {
-  width: 342px;
-  height: 284.16px;
+  width: 100%;
+  max-width: 342px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1085,14 +1087,17 @@ body {
 }
 
 .footer__trustpilot {
-  width: 120px;
+  width: 100%;
+  max-width: 120px;
   height: 24px;
   object-fit: contain;
 }
 
 .footer__bottom {
-  width: 1140px;
-  height: 104.09px;
+  width: 100%;
+  max-width: 1140px;
+  height: 100%;
+  max-height: 300px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1322,5 +1327,34 @@ body {
   }
   .text-carousel-block__pointers{
     display: none;
+  }
+  .features-block__container{
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  .media-block{
+    display: none;
+  }
+
+  .footer__main{
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin: 0 auto;
+  }
+  .footer__bottom {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    padding-bottom: 20px;
+    margin: 0 auto;
+  }
+  .footer__container{
+    margin: 0 auto;
+    align-items: center;
+  }
+  .footer__newsletter{
+    margin: 0 auto;
+    margin-left: 0;
   }
 }
