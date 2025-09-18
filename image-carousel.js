@@ -43,11 +43,14 @@ class ImageCarousel {
   }
 
   showSlides() {
+    const isMobile = window.innerWidth <= 768;
+    const visibleSlides = isMobile ? 1 : 3;
+
     for (let i = 0; i < this.slides.length; i++) {
       const slide = this.slides[i];
       let position = -1;
 
-      for (let pos = 0; pos < 3; pos++) {
+      for (let pos = 0; pos < visibleSlides; pos++) {
         const slideIndex = (this.currentSlide + pos) % this.totalSlides;
         if (i === slideIndex) {
           position = pos;
