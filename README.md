@@ -2,6 +2,8 @@
 
 Modern website for Woodendot furniture company featuring product galleries, interactive carousels, and smooth animations. **Note:** This project does not include responsive design.
 
+Layout based on a found design (non-commercial work    https://www.figma.com/file/rTTKRK2SkgwjlluWr0fPpE/Woodendot?node-id=0%3A1 ).
+
 ## Features
 
 - Interactive image and text carousels

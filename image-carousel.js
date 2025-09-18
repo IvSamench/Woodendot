@@ -24,6 +24,11 @@ class ImageCarousel {
 
     this.setupCarousel();
     this.startAutoPlay();
+    
+    // Обновлять карусель при изменении размера окна
+    window.addEventListener('resize', () => {
+      this.showSlides();
+    });
   }
 
   setupCarousel() {
@@ -44,7 +49,25 @@ class ImageCarousel {
 
   showSlides() {
     const isMobile = window.innerWidth <= 768;
+    const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
+    const isSmallPhone = window.innerWidth <= 375;
+    const isBigPhone = window.innerWidth > 375 && window.innerWidth <= 480;
+    
     const visibleSlides = isMobile ? 1 : 3;
+    
+    
+    let slideOffset;
+    if (isSmallPhone) {
+      slideOffset = 315;
+    } else if (isBigPhone) {
+      slideOffset = 365;  
+    } else if (isMobile) {
+      slideOffset = 390; 
+    } else if (isTablet) {
+      slideOffset = 320; 
+    } else {
+      slideOffset = 377;
+    }
 
     for (let i = 0; i < this.slides.length; i++) {
       const slide = this.slides[i];
@@ -59,10 +82,10 @@ class ImageCarousel {
       }
 
       if (position >= 0) {
-        slide.style.transform = `translateX(${position * 377}px)`;
+        slide.style.transform = `translateX(${position * slideOffset}px)`;
         slide.style.opacity = '1';
       } else {
-        slide.style.transform = 'translateX(-400px)';
+        slide.style.transform = `translateX(-${slideOffset + 50}px)`;
         slide.style.opacity = '0';
       }
     }
