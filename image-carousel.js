@@ -25,7 +25,7 @@ class ImageCarousel {
     this.setupCarousel();
     this.startAutoPlay();
     
-    // Обновлять карусель при изменении размера окна
+    
     window.addEventListener('resize', () => {
       this.showSlides();
     });
@@ -53,21 +53,32 @@ class ImageCarousel {
     const isSmallPhone = window.innerWidth <= 375;
     const isBigPhone = window.innerWidth > 375 && window.innerWidth <= 480;
     
-    const visibleSlides = isMobile ? 1 : 3;
-    
+    const visibleSlides = isMobile ? 1 : (isTablet ? 2 : 3);
     
     let slideOffset;
+    let containerWidth;
+    
     if (isSmallPhone) {
-      slideOffset = 315;
+      slideOffset = 300; 
+      containerWidth = 300;
     } else if (isBigPhone) {
-      slideOffset = 365;  
+      slideOffset = 350;  
+      containerWidth = 350;
     } else if (isMobile) {
-      slideOffset = 390; 
+      slideOffset = 368; 
+      containerWidth = 368;
     } else if (isTablet) {
-      slideOffset = 320; 
+      slideOffset = 310; 
+      containerWidth = 310;
     } else {
-      slideOffset = 377;
+      slideOffset = 377; 
+      containerWidth = 377;
     }
+
+    
+    const totalVisibleWidth = visibleSlides * slideOffset;
+    const containerActualWidth = this.slidesContainer.offsetWidth;
+    const centerOffset = (containerActualWidth - totalVisibleWidth) / 2;
 
     for (let i = 0; i < this.slides.length; i++) {
       const slide = this.slides[i];
@@ -82,10 +93,10 @@ class ImageCarousel {
       }
 
       if (position >= 0) {
-        slide.style.transform = `translateX(${position * slideOffset}px)`;
+        slide.style.transform = `translateX(${centerOffset + position * slideOffset}px)`;
         slide.style.opacity = '1';
       } else {
-        slide.style.transform = `translateX(-${slideOffset + 50}px)`;
+        slide.style.transform = `translateX(${centerOffset - slideOffset - 50}px)`;
         slide.style.opacity = '0';
       }
     }

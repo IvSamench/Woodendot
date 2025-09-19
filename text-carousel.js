@@ -8,7 +8,7 @@ class TextCarousel {
 
     
     this.autoplayDelay = 5000; 
-    this.currentSlide = 0; // 
+    this.currentSlide = 0;
     this.autoplayTimer = null; 
 
     
@@ -42,7 +42,7 @@ class TextCarousel {
    
     for (let i = 0; i < this.slides.length; i++) {
       const slide = this.slides[i];
-      slide.style.position = 'absolute'; // 
+      slide.style.position = 'absolute';
       slide.style.top = '0'; 
       slide.style.left = '0'; 
       slide.style.width = '100%'; 
