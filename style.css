@@ -1222,7 +1222,7 @@ body {
   }
 
   .carousel-block__container {
-    padding: 0 40px 60px 40px;
+    padding: 0 0px 60px 0px;
   }
 
   .carousel-block__slides {
@@ -1356,7 +1356,7 @@ body {
   }
 
   .carousel-block__container {
-    padding: 0 30px 50px 30px;
+    padding: 0px 0px 50px 30px;
   }
 
   .carousel-block__slides {
@@ -1511,7 +1511,7 @@ body {
   }
 
   .carousel-block__container {
-    padding: 0 20px 40px 20px;
+    padding: 0 0px 40px 0px;
   }
 
   .carousel-block__slides {
@@ -1936,6 +1936,7 @@ body {
   }
 
   .carousel-block__container {
+    margin-left: -10px;
     width: 100%;
     padding: 0;
     margin: 0 auto;

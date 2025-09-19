@@ -16,27 +16,41 @@ class ImageCarousel {
 
     if (!this.slidesContainer || !this.pointersContainer) return;
 
-    this.slides = this.slidesContainer.children;
-    this.pointers = this.pointersContainer.children;
+    this.slides = Array.from(this.slidesContainer.children);
+    this.pointers = Array.from(this.pointersContainer.children);
     this.totalSlides = this.slides.length;
 
     if (this.totalSlides === 0) return;
 
+    
+    if (!this.slidesContainer.style.position) this.slidesContainer.style.position = 'relative';
+    this.slidesContainer.style.overflow = 'hidden';
+
     this.setupCarousel();
     this.startAutoPlay();
+
     
-    
-    window.addEventListener('resize', () => {
-      this.showSlides();
-    });
+    window.addEventListener('resize', () => this.showSlides());
+    window.addEventListener('load', () => this.showSlides());
   }
 
   setupCarousel() {
+    
+    const transformTiming = 'transform 800ms cubic-bezier(.22,.8,.38,1)';
+    const opacityTiming = 'opacity 450ms ease';
+
     for (let i = 0; i < this.slides.length; i++) {
       const slide = this.slides[i];
       slide.style.position = 'absolute';
-      slide.style.transition = 'all 0.8s ease';
+      slide.style.left = '0';
+      slide.style.top = '0';
+      slide.style.transition = `${transformTiming}, ${opacityTiming}`;
       slide.style.opacity = '0';
+      slide.style.willChange = 'transform, opacity';
+      slide.style.backfaceVisibility = 'hidden';
+      slide.style.zIndex = '1';
+      
+      slide.style.transform = 'translate3d(-1000px,0,0)';
     }
 
     for (let i = 0; i < this.pointers.length; i++) {
@@ -48,42 +62,25 @@ class ImageCarousel {
   }
 
   showSlides() {
+    if (!this.slides.length) return;
+
     const isMobile = window.innerWidth <= 768;
     const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
-    const isSmallPhone = window.innerWidth <= 375;
-    const isBigPhone = window.innerWidth > 375 && window.innerWidth <= 480;
-    
     const visibleSlides = isMobile ? 1 : (isTablet ? 2 : 3);
-    
-    let slideOffset;
-    let containerWidth;
-    
-    if (isSmallPhone) {
-      slideOffset = 300; 
-      containerWidth = 300;
-    } else if (isBigPhone) {
-      slideOffset = 350;  
-      containerWidth = 350;
-    } else if (isMobile) {
-      slideOffset = 368; 
-      containerWidth = 368;
-    } else if (isTablet) {
-      slideOffset = 310; 
-      containerWidth = 310;
-    } else {
-      slideOffset = 377; 
-      containerWidth = 377;
-    }
 
     
+    const firstSlideRect = this.slides[0].getBoundingClientRect();
+    const slideOffset = firstSlideRect.width || this.slides[0].offsetWidth || 300;
+
     const totalVisibleWidth = visibleSlides * slideOffset;
-    const containerActualWidth = this.slidesContainer.offsetWidth;
+    const containerActualWidth = this.slidesContainer.getBoundingClientRect().width || this.slidesContainer.offsetWidth;
     const centerOffset = (containerActualWidth - totalVisibleWidth) / 2;
 
-    for (let i = 0; i < this.slides.length; i++) {
-      const slide = this.slides[i];
-      let position = -1;
+    
+    const transforms = new Array(this.slides.length);
 
+    for (let i = 0; i < this.slides.length; i++) {
+      let position = -1;
       for (let pos = 0; pos < visibleSlides; pos++) {
         const slideIndex = (this.currentSlide + pos) % this.totalSlides;
         if (i === slideIndex) {
@@ -93,16 +90,31 @@ class ImageCarousel {
       }
 
       if (position >= 0) {
-        slide.style.transform = `translateX(${centerOffset + position * slideOffset}px)`;
-        slide.style.opacity = '1';
+        const x = centerOffset + position * slideOffset;
+        transforms[i] = { x, visible: true, z: 2 };
       } else {
-        slide.style.transform = `translateX(${centerOffset - slideOffset - 50}px)`;
-        slide.style.opacity = '0';
+        
+        const x = centerOffset - slideOffset - 50;
+        transforms[i] = { x, visible: false, z: 1 };
       }
     }
 
-    this.pointersContainer.querySelector('.active')?.classList.remove('active');
-    this.pointers[this.currentSlide].classList.add('active');
+    
+    requestAnimationFrame(() => {
+      for (let i = 0; i < this.slides.length; i++) {
+        const slide = this.slides[i];
+        const t = transforms[i];
+        slide.style.transform = `translate3d(${Math.round(t.x)}px, 0, 0)`;
+        slide.style.opacity = t.visible ? '1' : '0';
+        slide.style.zIndex = String(t.z);
+        
+        slide.style.pointerEvents = t.visible ? 'auto' : 'none';
+      }
+
+      
+      this.pointersContainer.querySelector('.active')?.classList.remove('active');
+      this.pointers[this.currentSlide]?.classList.add('active');
+    });
   }
 
   goToslide(index) {
